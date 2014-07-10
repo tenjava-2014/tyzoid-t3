@@ -1,0 +1,3 @@
+name: tyzoid-t3
+main: com.tenjava.entries.tyzoid.t3.TenJava
+version: '${project.version}'
