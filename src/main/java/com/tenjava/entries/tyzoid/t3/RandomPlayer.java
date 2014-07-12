@@ -9,10 +9,14 @@ public class RandomPlayer {
 	private String name;
 	private UUID uuid;
 	private boolean invincible;
+	private int gibberish;
 	
 	public RandomPlayer(Player p){
 		this.name = p.getName();
 		this.uuid = p.getUniqueId();
+		
+		this.invincible = false;
+		this.gibberish = 0;
 	}
 	
 	public String getName() {
@@ -29,5 +33,18 @@ public class RandomPlayer {
 	
 	public void setInvincible(boolean invincible) {
 		this.invincible = invincible;
+	}
+	
+	public int getGibberish() {
+		return gibberish;
+	}
+
+	public void setGibberish(int gibberish) {
+		this.gibberish = gibberish;
+	}
+
+	public void resetEffects(){
+		this.invincible = false;
+		this.gibberish = 0;
 	}
 }

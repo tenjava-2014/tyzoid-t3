@@ -1,3 +1,17 @@
-name: tyzoid-t3
+name: RandomEffects
 main: com.tenjava.entries.tyzoid.t3.TenJava
 version: '${project.version}'
+permissions:
+    RandomEffects.*:
+        description: gives the user access to all plugin commands
+        children:
+            RandomEffects.effect: true
+    RandomEffects.effect:
+        description: allows the user to trigger an effect on any other user
+        default: op
+commands:
+    effect:
+        description: This will trigger an effect on a given player
+        usage: /effect <player> <effect> [severity]
+        permission: RandomEffects.effect
+        permission-message: You don't have permission to use that command.

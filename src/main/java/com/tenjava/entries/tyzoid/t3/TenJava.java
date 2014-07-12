@@ -7,42 +7,47 @@
 
 package com.tenjava.entries.tyzoid.t3;
 
-import java.util.ArrayList;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
+import com.tenjava.entries.tyzoid.t3.random.Effects;
 import com.tenjava.entries.tyzoid.t3.random.RandomTimer;
 
 public class TenJava extends JavaPlugin implements Listener {
+	private Words randomwords;
 	private RandomTimer randtimer;
-	private BukkitTask rttask;
-	private ArrayList<RandomPlayer> playerlist;
+	private ConcurrentHashMap<UUID, RandomPlayer> playerlist;
 	
 	@Override
 	public void onEnable() {
-		playerlist = new ArrayList<RandomPlayer>();
+		playerlist = new ConcurrentHashMap<UUID, RandomPlayer>();
+		randomwords = new Words();
 		
 		/*
 		 * Check if there are any users already online
 		 * This happens if the server is reloaded
 		 */
 		for(Player p : Bukkit.getOnlinePlayers()) {
-			playerlist.add(new RandomPlayer(p));
+			playerlist.put(p.getUniqueId(), new RandomPlayer(p));
 		}
 		
 		randtimer = new RandomTimer(this);
 		
 		// Run task every 100 seconds
-		rttask = randtimer.runTaskLater(this, 2000);
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, randtimer, 200L, 2000L);
 		
 		//Register events
 		this.getServer().getPluginManager().registerEvents(this, this);
@@ -50,38 +55,110 @@ public class TenJava extends JavaPlugin implements Listener {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		return false; // for now
+		if(command.getName().equals("effect")) {
+			if(args.length > 1 && args.length < 4) {
+				int type;
+				double severity;
+				
+				try {
+					type = Integer.parseInt(args[1]);
+					
+					severity = 4;
+					if(args.length == 3) severity = Integer.parseInt(args[2]) / 10d;
+				} catch (NumberFormatException e) {
+					sender.sendMessage("One of your numbers was not valid.");
+					return false;
+				}
+				
+				for(RandomPlayer p : playerlist.values()) {
+					if(p.getName().equals(args[0])) {
+						Effects effect = new Effects(p);
+						effect.startEvent((short) type, severity);
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	/**
 	 * Adds the player to the player list on connect
-	 * @param e the event
+	 * 
+	 * @param e
+	 *            the event
 	 */
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
-		playerlist.add(new RandomPlayer(e.getPlayer()));
+		Player p = e.getPlayer();
+		playerlist.put(p.getUniqueId(), new RandomPlayer(p));
 	}
 	
 	/**
 	 * Removes the player from the player list on disconnect
+	 * 
 	 * @param e the event
 	 */
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e) {
-		for(RandomPlayer p : playerlist) {
-			if(p.getName() == e.getPlayer().getName()){
-				playerlist.remove(p);
+		Player p = e.getPlayer();
+		playerlist.remove(p.getUniqueId());
+	}
+	
+	@EventHandler
+	public void onPlayerDamage(EntityDamageEvent e) {
+		if(!(e.getEntity() instanceof Player)) return;
+		
+		Player p = (Player) e.getEntity();
+		
+		if(playerlist.get(p.getUniqueId()).isInvincible()) e.setCancelled(true);
+	}
+	
+	@EventHandler
+	public void onPlayerChat(AsyncPlayerChatEvent e) {
+		int gibberishLevel = playerlist.get(e.getPlayer().getUniqueId()).getGibberish();
+		
+		if(gibberishLevel == 0) return;
+		
+		String message = e.getMessage();
+		String[] split = message.split(" ");
+		
+		switch (gibberishLevel) {
+			case 1:
+				// prefix with &k
+				e.setMessage(ChatColor.MAGIC + message);
 				break;
-			}
+			case 2:
+				// Replace every other word with a random(ish) word.
+				message = "";
+				for(int i = 0; i < split.length; i++){
+					if(i%2 == 0) message += randomwords.getRandomWord();
+					else message += split[i];
+					
+					if(i < split.length-1) message += " ";
+				}
+				
+				e.setMessage(message);
+				break;
+			case 3:
+				// Replace every word with a random(ish) word.
+				message = "";
+				for(int i = 0; i < split.length; i++){
+					message += randomwords.getRandomWord();
+					
+					if(i < split.length-1) message += " ";
+				}
+				
+				e.setMessage(message);
+				break;
 		}
 	}
 	
 	/**
-	 * Gets the plugins player list.
-	 * 
-	 * @return playerlist the list of players recognized by the plugin
+	 * Get the player hashmap
 	 */
-	public ArrayList<RandomPlayer> getPlayers() {
+	public ConcurrentHashMap<UUID, RandomPlayer> getPlayerMap() {
 		return playerlist;
 	}
 }
