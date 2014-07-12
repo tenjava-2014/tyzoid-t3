@@ -5,7 +5,7 @@ tyzoid's ten.java submission
 
 This is a submission for the 2014 ten.java contest.
 
-- __Theme:__
+- __Theme:__ What Random Events can occur in Minecraft?
 - __Time:__ Time 3 (7/12/2014 14:00 to 7/13/2014 00:00 UTC)
 - __MC Version:__ 1.7.9 (latest Bukkit beta)
 - __Stream URL:__ https://twitch.tv/tyzoid
@@ -17,7 +17,7 @@ This is a submission for the 2014 ten.java contest.
 Compilation
 -----------
 
-- Download & Install [Maven 3](http://maven.apache.org/download.html)
+- Download & Install [Maven 3](http://maven.apache.org/download.html) or run `sudo apt-get install maven` on any ubuntu/debian machine.
 - Clone the repository: `git clone https://github.com/tenjava/tyzoid-t3`
 - Compile and create the plugin package using Maven: `mvn`
 
@@ -29,7 +29,7 @@ Usage
 -----
 
 1. Install plugin
-2. Do things with it
+2. Wait for things to happen to your players
 
 <!-- Hi, tyzoid! This is the default README for every ten.java submission. -->
 <!-- We encourage you to edit this README with some information about your submission – keep in mind you'll be scored on documentation! -->
