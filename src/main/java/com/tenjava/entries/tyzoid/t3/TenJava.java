@@ -97,6 +97,7 @@ public class TenJava extends JavaPlugin implements Listener {
 					}*/
 					
 					sender.sendMessage("Not a valid type. Please use a number from 0 to 9");
+					return false;
 				}
 				
 				try {
