@@ -3,7 +3,6 @@ package com.tenjava.entries.tyzoid.t3.random;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.tenjava.entries.tyzoid.t3.RandomPlayer;
@@ -62,7 +61,6 @@ public class RandomTimer extends BukkitRunnable {
 				func = (short) (r.nextInt(effect.getEventCount() - 1) + 1);
 			}
 			
-			Bukkit.broadcastMessage("Started effect!");
 			effect.startEvent(func, r.nextDouble() * 10);
 		}
 	}

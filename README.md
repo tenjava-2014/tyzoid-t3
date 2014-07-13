@@ -31,5 +31,22 @@ Usage
 1. Install plugin
 2. Wait for things to happen to your players
 
+
+Command Effect Types:
+Events:
+		 *   Negative:
+		 *     Zombie Spawn (night only)
+		 *     Angry Wolves
+		 *     Teleport to random location/cave
+		 *     Encase in ice
+		 *     Lightning Strikes player
+		 *   Positive:
+		 *     Give diamonds (1-4)
+		 *     Equipt Diamond Armor (if user has some, add to inventory/drop if full)
+		 *     Award a random amount of XP (200-300 - good for ~10-15 levels)
+		 *     Invincibility for 100 seconds (one minute, 40 seconds)
+		 *   Neutral:
+		 *     Gibberish (make chat messages unable to be understood)
+		 *
 <!-- Hi, tyzoid! This is the default README for every ten.java submission. -->
 <!-- We encourage you to edit this README with some information about your submission – keep in mind you'll be scored on documentation! -->

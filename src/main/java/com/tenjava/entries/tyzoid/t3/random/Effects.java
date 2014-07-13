@@ -3,7 +3,6 @@ package com.tenjava.entries.tyzoid.t3.random;
 import java.util.HashMap;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -36,8 +35,6 @@ public class Effects {
 	 *            a double between 0.0 and 10.0
 	 */
 	public boolean startEvent(short eventID, double severity) {
-		Bukkit.broadcastMessage("Event " + eventID + " with severity " + severity
-				+ " started for player" + player.getName());
 		switch (eventID) {
 			case 0:
 				zombies((short) (severity + 10));

@@ -57,16 +57,54 @@ public class TenJava extends JavaPlugin implements Listener {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(command.getName().equals("effect")) {
 			if(args.length > 1 && args.length < 4) {
+				String[] types = {"Zombie", "Wolf", "Teleport", "Ice", "Lightning",
+						"Diamond", "Armour|Armor", "Xp", "Invincibile", "Nonsense"};
 				int type;
 				double severity;
 				
 				try {
 					type = Integer.parseInt(args[1]);
+				} catch (NumberFormatException e) {
+					/*type = -1;
+					for(int i = 0; i < types.length && type == -1; i++){
+						System.out.println(types[i]);
+						String[] split = types[i].split("|");
+						for (String s : split){
+							System.out.println(s);
+							if(s.equalsIgnoreCase(args[1])){
+								System.out.println("Matched with " + s);
+								type = i;
+								break;
+							}
+						}
+					}
 					
+					if(type == -1){
+						sender.sendMessage("Not a valid type. Valid types:");
+						String message = "";
+						for (int i = 0; i < types.length; i++){
+							System.out.println(types[i]);
+							String[] split = types[i].split("|");
+							if(i % 3 == 2){
+								sender.sendMessage(message + ", " + split[0]);
+							} else if(i%3 == 0) {
+								message = split[0];
+							} else {
+								message += ", " + split[0];
+							}
+						}
+						return false;
+					}*/
+					
+					sender.sendMessage("Not a valid type. Please use a number from 0 to 9");
+				}
+				
+				try {
 					severity = 4;
 					if(args.length == 3) severity = Integer.parseInt(args[2]) / 10d;
+					if(severity > 100 || severity < 0) throw new NumberFormatException();
 				} catch (NumberFormatException e) {
-					sender.sendMessage("One of your numbers was not valid.");
+					sender.sendMessage("Severity is invalid. Please specify a number from 0 to 100");
 					return false;
 				}
 				
